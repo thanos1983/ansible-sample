@@ -1,0 +1,13 @@
+---
+# tasks file for stopProcesses
+- name: Stop docker service
+  become: yes
+  systemd:
+    state: stopped
+    name: docker
+
+- name: Remove /var/lib/docker due to change of character
+  become: yes
+  file:
+    path: /var/lib/docker
+    state: absent

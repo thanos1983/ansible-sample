@@ -5,12 +5,42 @@
   lvg:
     vg: docker
     pvs: /dev/sdb
-    pesize: 32
 
-- name: Create a thin pool of 512g
+- name: Create logical volumes
+  become: yes
   lvol:
+    vg: "{{ item.vg }}"
+    lv: "{{ item.lv }}"
+    size: "{{ item.size }}"
+    opts: "{{ item.opts }}"
+    force: "{{ item.force }}"
+  loop: "{{ addLogicalVolumes }}"
+
+- name: Convert the volumes to a thin pool and a storage location for metadata for the thin pool
+  become: yes
+  shell: |
+    lvconvert -y \
+    --zero n \
+    -c 512K \
+    --thinpool docker/thinpool \
+    --poolmetadata docker/thinpoolmeta
+
+- name: Apply the LVM profile
+  become: yes
+  shell: |
+    lvchange --metadataprofile docker-thinpool docker/thinpool
+
+- name: Remove the logical volume.
+  become: yes
+  lvol:
+    vg: "{{ item.vg }}"
+    lv: "{{ item.lv }}"
+    state: "{{ item.state }}"
+    force: "{{ item.force }}"
+  loop: "{{ removeLogicalVolumes }}"
+
+- name: Remove volume group
+  become: yes
+  lvg:
     vg: docker
-    lv: thinpool
-    size: 95%FREE
-    thinpool: docker/thinpool
-    opts: --wipesignatures y
+    state: absent

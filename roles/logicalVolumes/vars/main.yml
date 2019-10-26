@@ -1,2 +1,9 @@
 ---
 # vars file for logicalVolumes
+addLogicalVolumes:
+  - { vg: "docker", lv: "thinpool", size: "95%VG", opts: "--wipesignatures y", force: "yes" }
+  - { vg: "docker", lv: "thinpoolmeta", size: "1%VG", opts: "--wipesignatures y", force: "yes" }
+
+removeLogicalVolumes:
+  - { vg: "docker", lv: "thinpool", state: "absent", force: "yes" }
+  - { vg: "docker", lv: "thinpoolmeta", state: "absent", force: "yes" }

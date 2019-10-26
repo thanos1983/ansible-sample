@@ -13,9 +13,10 @@
       run_once:   true
 
   roles:
-    - dockerProcesses
-    - dockerInfo
+    - stopProcesses
+    - logicalVolumes
+    # - dockerProcesses
+    # - dockerInfo
     # - dockerContainers
-    # - logicalVolumes
     # - createUser
     # - createDirectories    
