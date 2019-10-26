@@ -1,0 +1,16 @@
+---
+# tasks file for logicalVolumes
+- name: Create a volume group on /dev/sdb with physical extent size = 32MB
+  become: yes
+  lvg:
+    vg: docker
+    pvs: /dev/sdb
+    pesize: 32
+
+- name: Create a thin pool of 512g
+  lvol:
+    vg: docker
+    lv: thinpool
+    size: 95%FREE
+    thinpool: docker/thinpool
+    opts: --wipesignatures y

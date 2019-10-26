@@ -1,0 +1,32 @@
+---
+- name: Stop docker service
+  become: yes
+  systemd:
+    state: stopped
+    name: docker
+
+- name: Remove /var/lib/docker due to change of character
+  become: yes
+  file:
+    path: /var/lib/docker
+    state: absent
+
+# tasks file for dockerProcesses
+- name: Copy daemon.json with owner root and permissions
+  register: daemon
+  become: yes
+  copy:
+    src: daemon.json.2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart docker service, in all cases, also issue daemon-reload to pick up config changes
+  become: yes
+  systemd:
+    enabled: yes
+    state: restarted
+    daemon_reload: yes
+    name: docker
+  when: daemon.changed == true

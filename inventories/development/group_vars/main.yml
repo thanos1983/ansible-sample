@@ -1,0 +1,8 @@
+ansible_python_interpreter=/usr/bin/python3
+
+userParameters:
+   - { name: 'sample-user',  password: 'sample-password', groups: ['users', 'docker'] }
+
+defDirectories:
+   - { path: '/def', group: 'sample-user', owner: 'sample-user', mode: "0755" }
+   - { path: '/def/sample-user', group: 'sample-user', owner: 'sample-user', mode: "0755" }

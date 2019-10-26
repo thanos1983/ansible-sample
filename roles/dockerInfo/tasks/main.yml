@@ -1,0 +1,34 @@
+---
+# tasks file for dockerInfo
+- name: Get info on docker host and list images
+  docker_host_info:
+    containers: yes
+  register: result
+
+- name: Debug Containers
+  debug:
+    msg: "{{ item.Names[0] }}"
+  loop: "{{ result.containers }}"
+  when: result.containers | length != 0
+
+- name: Stop Containers
+  docker_container:
+    name: "{{ item.Names[0] }}"
+    state: stopped
+  loop: "{{ result.containers }}"
+  when: result.containers | length != 0
+
+- name: Prune everything (including non-dangling images)
+  docker_prune:
+    containers: yes
+    images: yes
+    images_filters:
+      dangling: false
+    networks: yes
+    volumes: yes
+    builder_cache: yes
+
+- name: Get info on docker host
+  debug:
+    # var: result
+    msg: "{{ result.host_info.Driver }}"

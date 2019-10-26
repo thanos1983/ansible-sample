@@ -1,0 +1,21 @@
+---
+- hosts: all
+  remote_user: "{{ ansible_user }}"
+  any_errors_fatal: true
+  order: sorted
+
+  pre_tasks:
+    - name: Validate Ansible version
+      assert:
+        that:
+          - ansible_version is defined
+          - ansible_version.full is version('2.8.0.0', '>=')
+      run_once:   true
+
+  roles:
+    - dockerProcesses
+    - dockerInfo
+    # - dockerContainers
+    # - logicalVolumes
+    # - createUser
+    # - createDirectories    
