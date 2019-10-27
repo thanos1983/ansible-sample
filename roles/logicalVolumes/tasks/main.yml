@@ -1,10 +1,18 @@
 ---
 # tasks file for logicalVolumes
+- name: Get logical volume group name(s)
+  become: yes
+  register: lvg
+  shell: |
+    lvdisplay -m | grep -i vg | awk '{print $3}'
+
 - name: Create a volume group on /dev/sdb with physical extent size = 32MB
   become: yes
   lvg:
     vg: docker
     pvs: /dev/sdb
+  when:
+    - lvg.stdout_lines | length == 0
 
 - name: Create logical volumes
   become: yes
@@ -15,6 +23,8 @@
     opts: "{{ item.opts }}"
     force: "{{ item.force }}"
   loop: "{{ addLogicalVolumes }}"
+  when:
+    - lvg.stdout_lines | length == 0
 
 - name: Convert the volumes to a thin pool and a storage location for metadata for the thin pool
   become: yes
@@ -24,23 +34,37 @@
     -c 512K \
     --thinpool docker/thinpool \
     --poolmetadata docker/thinpoolmeta
+  when:
+    - lvg.stdout_lines | length == 0
 
 - name: Apply the LVM profile
   become: yes
   shell: |
     lvchange --metadataprofile docker-thinpool docker/thinpool
+  when:
+    - lvg.stdout_lines | length == 0
 
-- name: Remove the logical volume.
+- name: Get logical volume group name(s)
   become: yes
-  lvol:
-    vg: "{{ item.vg }}"
-    lv: "{{ item.lv }}"
-    state: "{{ item.state }}"
-    force: "{{ item.force }}"
-  loop: "{{ removeLogicalVolumes }}"
+  register: lvgn
+  shell: |
+    lvdisplay -m | grep -i vg | awk '{print $3}'
+
+# - name: Remove the logical volume.
+#  become: yes
+#  lvol:
+#    vg: "{{ item.vg }}"
+#    lv: "{{ item.lv }}"
+#    state: "{{ item.state }}"
+#    force: "{{ item.force }}"
+#  loop: "{{ removeLogicalVolumes }}"
 
 - name: Remove volume group
   become: yes
   lvg:
-    vg: docker
+    vg: "{{ item }}"
     state: absent
+    force: yes
+  loop: "{{ lvgn.stdout_lines }}"
+  when:
+    - lvgn.stdout_lines | length > 0

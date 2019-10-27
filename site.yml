@@ -13,7 +13,7 @@
       run_once:   true
 
   roles:
-    - stopProcesses
+    # - stopProcesses
     - logicalVolumes
     # - dockerProcesses
     # - dockerInfo
