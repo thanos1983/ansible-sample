@@ -1,4 +1,4 @@
-db.auth('{{ user }}', '{{ user }}')
+db.auth('{{ dockerParameters.user }}', '{{ dockerParameters.password }}')
 
 db = db.getSiblingDB('test-database')
 
