@@ -1,4 +1,14 @@
-ansible_python_interpreter=/usr/bin/python3
+user: "tinyos"
+group: "tinyos"
+path: "/tmp/mongo"
+
+dockerParameters: {
+        user: 'test-user',
+        password: 'test-psw',
+        group: 'sample-user',
+        owner: 'sample-user',
+        mode: '0644'
+}
 
 userParameters:
    - { name: 'sample-user',  password: 'sample-password', groups: ['users', 'docker'] }

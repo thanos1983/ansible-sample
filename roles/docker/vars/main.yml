@@ -1,0 +1,8 @@
+---
+# vars file for docker
+dockerDir:
+  - { path: '{{ path }}', state: 'directory', recurse: 'yes', owner: '{{ user }}', group: '{{ group }}', mode: '0755' }
+
+dockerFiles:
+  - { src: 'Dockerfile.j2', dest: '{{ path }}/Dockerfile', owner: '{{ user }}', group: '{{ group }}', mode: '0644' }
+  - { src: 'mongo-init.j2', dest: '{{ path }}/mongo-init.js', owner: '{{ user }}', group: '{{ group }}', mode: '0644' }

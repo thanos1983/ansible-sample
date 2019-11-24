@@ -11,7 +11,7 @@ function deploy() {
         bamboo_env="dev"
 	bamboo_ansible_user="tinyos"
 
-	case "$bamboo_env" in 
+	case "$bamboo_env" in
 		"dev")
     			bamboo_inventory_file="inventories/development/hosts.yml"
   		;;
@@ -31,11 +31,10 @@ function deploy() {
 		exit 1
 	else
 		ansible-playbook \
-		  -i ${bamboo_inventory_file} \
-		  -e ansible_user=${bamboo_ansible_user} \
-		  site.yml -v || error "deploy"
+			-i ${bamboo_inventory_file} \
+		  	-e ansible_user=${bamboo_ansible_user} \
+		  	site.yml -v || error "deploy"
 	fi
-
 }
 
 deploy

@@ -1,0 +1,4 @@
+---
+# tasks file for docker
+- name: Prerequisites for docker role
+  include: prerequisites.yml
