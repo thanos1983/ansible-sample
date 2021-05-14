@@ -1,3 +1,8 @@
+# sensitive data
+ansible_ssh_pass: "{{ vault_ansible_ssh_pass }}"
+# ansible_ssh_pass: 'K@potes1983'
+# ansible_become_pass: 'K@potes1983'
+
 user: "tinyos"
 group: "tinyos"
 path: "/tmp/mongo"

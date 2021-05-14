@@ -1,0 +1,13 @@
+---
+# tasks file for roles/testRole
+- name: Sample ping
+  ansible.builtin.ping:
+
+- name: Sample echo
+  register: cmdStdOut
+  ansible.builtin.shell:
+    cmd: 'echo test'
+
+- name: Debug stdout
+  debug:
+    var: cmdStdOut.stdout
