@@ -1,1 +1,22 @@
-ansible_python_interpreter=/usr/bin/python3
+# sensitive data
+dev_pass: "{{ dev_ansible_ssh_pass }}"
+ansible_ssh_pass: 'K@potes1983'
+# ansible_become_pass: 'K@potes1983'
+
+user: "tinyos"
+group: "tinyos"
+path: "/tmp/mongo"
+
+dockerParameters:
+  user: 'test-user'
+  password: 'test-psw'
+  group: 'sample-user'
+  owner: 'sample-user'
+  mode: '0644'
+
+userParameters:
+   - { name: 'sample-user',  password: 'sample-password', groups: ['users', 'docker'] }
+
+defDirectories:
+   - { path: '/def', group: 'sample-user', owner: 'sample-user', mode: "0755" }
+   - { path: '/def/sample-user', group: 'sample-user', owner: 'sample-user', mode: "0755" }

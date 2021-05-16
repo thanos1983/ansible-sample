@@ -4,6 +4,11 @@
   any_errors_fatal: true
   order: sorted
 
+  pre_tasks:
+    - name: Include vars for environment
+      ansible.builtin.include_vars:
+        file: "{{ env_variable }}.yml"
+
   roles:
     # - stopProcesses
     # - logicalVolumes

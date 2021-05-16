@@ -11,3 +11,7 @@
 - name: Debug stdout
   debug:
     var: cmdStdOut.stdout
+
+- name: Debug vault data
+  debug:
+    var: dev_pass

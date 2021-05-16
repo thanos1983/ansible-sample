@@ -8,20 +8,24 @@ function error() {
 }
 
 function deploy() {
-        bamboo_env="dev"
+	bamboo_env="prod"
 	bamboo_ansible_user="tinyos"
+	echo "${something:=test2}" > .vault_pass
 
-	case "$bamboo_env" in
+	case "${bamboo_env}" in
 		"dev")
-    			bamboo_inventory_file="inventories/development/hosts.yml"
+			bamboo_inventory_file="inventories/development/hosts.yml"
   		;;
-  		"prod")
-    			bamboo_inventory_file="inventories/production/hosts.yml"
-  		;;
-  		*)
-    			echo "Unknown environment [$bamboo_env] have to be either dev or prod"
-    			exit 1
-  		;;
+		"preprod")
+			bamboo_inventory_file="inventories/preproduction/hosts.yml"
+		;;
+		"prod")
+			bamboo_inventory_file="inventories/production/hosts.yml"
+		;;
+		*)
+			echo "Unknown environment [$bamboo_env] have to be either dev or prod"
+			exit 1
+		;;
 	esac
 
 	echo "HOSTS TO DEPLOY TO ${bamboo_inventory_file} environment is ${bamboo_env}"
@@ -32,8 +36,9 @@ function deploy() {
 	else
 		ansible-playbook \
 			-i ${bamboo_inventory_file} \
-		  	-e ansible_user=${bamboo_ansible_user} \
-		  	site.yml -v || error "deploy"
+			-e env_variable=${bamboo_env} \
+			-e ansible_user=${bamboo_ansible_user} \
+			site.yml -v || error "deploy"
 	fi
 }
 
