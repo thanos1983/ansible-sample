@@ -1,7 +1,7 @@
 # sensitive data
 dev_pass: "{{ dev_ansible_ssh_pass }}"
-ansible_ssh_pass: 'K@potes1983'
-# ansible_become_pass: 'K@potes1983'
+ansible_ssh_pass: 'myPassword'
+# ansible_become_pass: 'myPassword'
 
 user: "tinyos"
 group: "tinyos"
